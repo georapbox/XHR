@@ -1,4 +1,6 @@
-XHR
+XHR.js
 ===
 
-A vanilla javascript wrapper for the XMLHttpRequest object.
+####A vanilla javascript wrapper for the **XMLHttpRequest** object.
+
+(Under development)

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>XHR.js - Demo</title>
+	<link rel="stylesheet" href="demo.css">
+</head>
+<body>
+    <!-- #main -->
+	<div id="main">
+		<div id="header">
+		    <h1>XHR<span>.js</span></h1>
+		    <p>A vanilla javascript wrapper for the <strong>XMLHttpRequest</strong> object.</p>
+		    <div class="clear"></div>
+		</div>
+		
+		<h2>Demos</h2>
+		
+		<div class="block">
+			<div class="title">
+				<h2>Form submission with POST</h2>
+				<a href="javascript:void(0);" onclick="openModal('modal_1');">View source</a>
+			</div>
+			<div class="inner">
+				<form name="form" id="myform" method="post" name="myform">
+					<input type="text" name="fName" id="fName" placeholder="First name" required>
+					<input type="text" name="lName" id="lName" placeholder="Last name" required>
+					<select name="position">
+						<option disabled selected>Please select one option.</option>
+						<option value="Position 1">Position 1</option>
+						<option value="Position 2">Position 2</option>
+						<option value="Position 3">Position 3</option>
+					</select>
+					<input type="submit" id="send" name="send" value="Submit">
+				</form>
+				
+				<div id="form_response"></div>
+			</div>
+		</div>
+
+		<div class="block">
+			<div class="title">
+				<h2>Submit an object with POST</h2>
+				<a href="javascript:void(0);" onclick="openModal('modal_2');">View source</a>
+			</div>
+			<div class="inner">
+				<pre>var person = { foo: 'FOO!', bar: 'BAR!'};</pre>
+				<button id="submitObject">Submit</button>
+				<div id="object_response"></div>
+			</div>
+		</div>
+		
+		<h2>Usage example</h2>
+<pre>
+var xhr = new XHR({
+    method: 'post',
+    url: '&lt;example-url&gt;',
+    async: true,
+    serialize: true,
+    data: document.forms[0],
+    contentType: 'application/x-www-form-urlencoded',
+    customHeaders: [
+        {'Custom-Header-1': 'Value 1'},
+        {'Custom-Header-2': 'Value 2'}
+    ],
+    success: function (status, response) {
+        console.log(status, response);
+    },
+    error: function (status, response) {
+        console.log('Request was unsuccessful: ' + status);
+    }
+});	
+</pre>
+
+        <h2>Options</h2>
+        <ul>
+            <li><code>method</code> | <span class="blue">{String}</span> | Type of request. Default: "get"</li>
+            <li><code>url</code> | <span class="blue">{String}</span> | Request url (relative path). Default: ''</li>
+            <li><code>async</code> | <span class="blue">{Boolean}</span> | Defines if request is asynchronous or not. Default: true</li>
+            <li><code>serialize</code> | <span class="blue">{Boolean}</span> | Defines if forms data sent in a POST request should be serialized. Default: false</li>
+            <li><code>data</code> | <span class="blue">{String / Object}</span> | Data to be sent as the body of the request. Default is "null" for browser compatibility issues.</li>
+            <li><code>contentType</code> | <span class="blue">{String}</span> | Sets the Content Type of the request. Default: "application/x-www-form-urlencoded"</li>
+            <li><code>customHeaders</code> | <span class="blue">{Array}</span> | Sets custom request headers. Expects an array of objects. Default value is empty array.</li>
+            <li><code>success</code> | <span class="blue">{Function}</span> | Callback function to handle success. Default is empty function.</li>
+            <li><code>error</code> | <span class="blue">{Function}</span> | Callback function to handle error. Default is empty function.</li>
+        </ul>
+        
+        <div id="footer">
+            <p>Published under the <a href="http://www.opensource.org/licenses/mit-license.php" target="_blank">MIT License</a>.</p>
+            <p>Copyright &copy; 2014 <a href="https://github.com/georapbox" target="_blank">@georapbox</a></p>
+        </div>
+	</div>
+	<!-- /#main -->
+	
+	<!-- Modals -->
+	<div class="modal" id="modal_1">
+		<div class="inner">
+			<a href="javascript:void(0);" class="close" onclick="closeModal('modal_1')">&times;</a>
+<pre>
+var xhr = new XHR({
+  method: 'post',
+  url: 'post_test.php',
+  async: true,
+  serialize: true,
+  data: form,
+  contentType: 'application/x-www-form-urlencoded',
+  customHeaders: [
+    {'Custom-Header-1': 'Value 1'},
+    {'Custom-Header-2': 'Value 2'}
+  ],
+  success: function (status, response) {
+    responsePlaceholder.innerHTML += response;
+  },
+  error: function (status, response) {
+    responsePlaceholder.innerHTML = 'Request was unsuccessful: ' + status;
+  }
+});	
+</pre>
+		</div>
+	</div>
+	
+	<div class="modal" id="modal_2">
+		<div class="inner">
+			<a href="javascript:void(0);" class="close" onclick="closeModal('modal_2')">&times;</a>
+<pre>
+var xhr = new XHR({
+	method: 'post',
+	url: 'post_test.php',
+	async: true,
+	data: 'person=' + JSON.stringify(person),
+	contentType: 'application/x-www-form-urlencoded',
+	success: function (status, response) {
+		responsePlaceholder.innerHTML = response;
+	},
+	error: function (status, response) {
+		responsePlaceholder.innerHTML = 'Request was unsuccessful: ' + status;
+	}
+});		
+</pre>
+		</div>
+	</div>
+
+	<script src="../src/xhr.js"></script>
+	<script>
+		/**
+		 * FORM POST DEMO
+		 */
+		(function () {
+			var form = document.getElementById('myform'), 
+				submitBtn = document.getElementById('send'),
+				responsePlaceholder = document.getElementById('form_response')
+            
+			submitBtn.onclick = function (e) {
+				e = e || window.event;
+				(e.preventDefault) ? e.preventDefault() : e.returnValue = false;
+                
+				var xhr = new XHR({
+					method: 'post',
+					url: 'post_test.php',
+					async: true,
+					serialize: true,
+					data: form,
+					contentType: 'application/x-www-form-urlencoded',
+					customHeaders: [
+						{'Custom-Header-1': 'Value 1'},
+						{'Custom-Header-2': 'Value 2'}
+					],
+					success: function (status, response) {
+						responsePlaceholder.innerHTML = response;
+					},
+					error: function (status, response) {
+						responsePlaceholder.innerHTML = 'Request was unsuccessful: ' + status;
+					}
+				});
+			};
+		}());
+		
+		/**
+		 * OBJECT SUBMISSION DEMO
+		 */
+		(function () {
+			var responsePlaceholder = document.getElementById('object_response');
+			
+			var person = {
+				foo: 'FOO!',
+				bar: 'BAR!'
+			};
+            
+			document.getElementById('submitObject').onclick = function (e) {
+				var xhr = new XHR({
+					method: 'post',
+					url: 'post_test.php',
+					async: true,
+					data: 'person=' + JSON.stringify(person),
+					contentType: 'application/x-www-form-urlencoded',
+					success: function (status, response) {
+						responsePlaceholder.innerHTML = response;
+					},
+					error: function (status, response) {
+						responsePlaceholder.innerHTML = 'Request was unsuccessful: ' + status;
+					}
+				});	
+			};	
+		}());
+		
+		
+		
+		function openModal(modalID) {
+			document.getElementById(modalID).className = 'modal visible';
+		}
+		
+		function closeModal(modalID) {
+			document.getElementById(modalID).className = 'modal hidden';
+		}
+        
+        
+		/*var xhr_get = new XHR({
+			method: 'get',
+			url: 'get_test.php?' + encodeURIComponent('name') + '=' + encodeURIComponent('George Raptis'),
+			async: true,
+			data: null,
+			contentType: 'application/x-www-form-urlencoded',
+			success: function (status, response) {
+				console.log(status, response);
+			},
+			error: function (status, response) {
+				console.log('Request was unsuccessful: ' + status);
+			}
+		});*/
+	</script>
+</body>
+</html>
