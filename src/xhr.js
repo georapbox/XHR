@@ -1,11 +1,11 @@
 /*jshint camelcase: true, curly: true, eqeqeq: true, forin: true, freeze: true, immed: true, latedef: nofunc, newcap: true, noarg: true, noempty: true, nonbsp: true, nonew: true, plusplus: true, quotmark: single, undef: true, unused: strict, browser: true, devel: true, indent: 4*/
 
 /**
- * XMLHttpRequest Object Wrapper
- * Wraps the original XMLHttpRequest Object
- * to provide an easier Interface for making AJAX requests.
+ * XHR.js
+ * A vanilla javascript wrapper for the XMLHttpRequest object.
  * @version 0.1.0
  * @author George Raptis <https://github.com/georapbox>
+ * @license MIT <http://www.opensource.org/licenses/mit-license.php>
  */
 (function (name, context, definition) {
 	context[name] = definition();
