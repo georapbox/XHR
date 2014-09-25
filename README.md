@@ -32,10 +32,10 @@ var xhr = new XHR({
 ##Options
 - **method** | {String} | Type of request. Default value is "get".
 - **url** | {String} | Request url (relative path). Default value is ''.
-- **async** | {Boolean} | Defines if request is asynchronous or not. Defaultvalue is true.
+- **async** | {Boolean} | Defines if request is asynchronous or not. Default value is true.
 - **serialize** | {Boolean} | Defines if forms data sent in a POST request should be serialized. Default value is false.
-- **data** | {String / Object} | Data to be sent as the body of the request. Default is "null" for browser compatibility issues.
-- **contentType** | {String} | Sets the Content Type of the request. Default: "application/x-www-form-urlencoded"
+- **data** | {String / Object} | Data to be sent as the body of the request. Default value is "null" for browser compatibility issues.
+- **contentType** | {String} | Sets the Content Type of the request. Default value is "application/x-www-form-urlencoded"
 - **customHeaders** | {Array} | Sets custom request headers. Expects an array of objects. Default value is empty array.
 - **success** | {Function} | Callback function to handle success. Default is empty function.
 - **error** | {Function} | Callback function to handle error. Default is empty function.
