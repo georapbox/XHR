@@ -30,7 +30,7 @@ var xhr = new XHR({
 
 
 ##Options
-- **method** | {String} | Type of request. Defaultvalue is "get".
+- **method** | {String} | Type of request. Default value is "get".
 - **url** | {String} | Request url (relative path). Default value is ''.
 - **async** | {Boolean} | Defines if request is asynchronous or not. Defaultvalue is true.
 - **serialize** | {Boolean} | Defines if forms data sent in a POST request should be serialized. Default value is false.
