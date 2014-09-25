@@ -1,9 +1,8 @@
 /*jshint camelcase: true, curly: true, eqeqeq: true, forin: true, freeze: true, immed: true, latedef: nofunc, newcap: true, noarg: true, noempty: true, nonbsp: true, nonew: true, plusplus: true, quotmark: single, undef: true, unused: strict, browser: true, devel: true, indent: 4*/
 
 /**
- * XHR.js
- * A vanilla javascript wrapper for the XMLHttpRequest object.
- * @version 0.1.0
+ * XHR.js - A vanilla javascript wrapper for the XMLHttpRequest object.
+ * @version 0.1.1
  * @author George Raptis <https://github.com/georapbox>
  * @license MIT <http://www.opensource.org/licenses/mit-license.php>
  */
@@ -28,6 +27,24 @@
 			return arguments[0];
 		},
 		
+		encodeUrl: function (url) {
+			var domain = url.substring(0, url.indexOf('?') + 1),
+				search = url.substring(url.indexOf('?') + 1),
+				vars = search.split('&'),
+				varsLen = vars.length,
+				encodedUrl = domain,
+				pair,
+				i;
+			
+			for (i = 0; i < varsLen; i += 1) {
+				pair = vars[i].split('=');
+				encodedUrl += encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1]) + '&';
+			}
+			
+			encodedUrl = encodedUrl.substring(0, encodedUrl.length - 1);
+			return encodedUrl;
+		},
+		
 		serialize: function (form) {
 			var parts = [],
 				field = null,
@@ -44,7 +61,7 @@
 				switch (field.type) {
 					case 'select-one':
 					case 'select-multiple':
-						if (field.name.length) {
+						if (field.name.length) {		
 							for (j = 0, optLen = field.options.length; j < optLen; j += 1) {
 								option = field.options[j];
 								
@@ -118,22 +135,53 @@
 		that.customHeaders = options.customHeaders;
 		that.success = options.success;
 		that.error = options.error;
+		that.progressEvent = {};
 		
 		customHeadersLen = that.customHeaders.length;
 		
 		// Create a new XMLHttpRequest. 
 		xhr = new XMLHttpRequest();
 		
+		// onreadystatechange event
 		xhr.onreadystatechange = function () {
 			// if request is completed, handle success or error states.
 			if (xhr.readyState === 4) {
 				if (xhr.status >= 200 && xhr.status < 300 || xhr.status === 304) {
-					that.success(xhr.status, xhr.responseText);
+					that.success(xhr.status, xhr.responseText, xhr.responseXML, xhr.statusText);
 				} else {
-					that.error(xhr.status, xhr.responseText);
+					that.error(xhr.status, xhr.responseText, xhr.responseXML, xhr.statusText);
 				}	
 			}
 		};
+		
+		// onprogress event
+		xhr.onprogress = function (event) {
+			if (event.lengthComputable){
+				that.progressEvent = {
+					bubbles: event.bubbles,
+					cancelable: event.cancelable,
+					currentTarget: event.currentTarget,
+					defaultPrevented: event.defaultPrevented,
+					eventPhase: event.eventPhase,
+					explicitOriginalTarget: event.explicitOriginalTarget,
+					isTrusted: event.isTrusted,
+					lengthComputable: event.lengthComputable,
+					loaded: event.loaded,
+					originalTarget: event.originalTarget,
+					target: event.target,
+					timeStamp: event.timeStamp,
+					total: event.total,
+					type: event.type
+				};
+				
+				return that.progressEvent;
+			}
+		};
+		
+		// Encode URL in case of a "GET" request.
+		if (that.method === 'get') {
+			that.url = helpers.encodeUrl(that.url);
+		}
 		
 		// Prepare the request to be sent.
 		xhr.open(that.method, that.url, that.async);
@@ -165,7 +213,7 @@
 			that.data = helpers.serialize(that.data);
 		}
         
-        // Send data.
+		// Send data.
 		xhr.send(that.data);
 		
 		return that;
