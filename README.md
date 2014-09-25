@@ -3,6 +3,8 @@ XHR.js
 
 ####A vanilla javascript wrapper for the **XMLHttpRequest** object.
 
+#####(Under development)
+
 ## Usage Example
 <pre>
 var xhr = new XHR({
