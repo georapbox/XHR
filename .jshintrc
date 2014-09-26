@@ -1,0 +1,21 @@
+{
+    "camelcase": true,
+    "curly": true,
+    "eqeqeq": true,
+    "forin": true,
+    "freeze": true,
+    "immed": true,
+    "latedef": "nofunc",
+    "newcap": true,
+    "noarg": true,
+    "noempty": true,
+    "nonbsp": true,
+    "nonew": true,
+    "plusplus": true,
+    "quotmark": "single",
+    "undef": true,
+    "unused": "strict",
+    "browser": true,
+    "devel": true,
+    "indent": 4
+}
