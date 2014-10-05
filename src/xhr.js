@@ -1,7 +1,7 @@
 /**
  * XHR.js - A vanilla javascript wrapper for the XMLHttpRequest object.
  * @version 0.1.1
- * @author George Raptis <https://github.com/georapbox>
+ * @author George Raptis (https://github.com/georapbox)
  *
  * The MIT License (MIT)
  *
