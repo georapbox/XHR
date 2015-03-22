@@ -17,5 +17,9 @@
     "unused": "strict",
     "browser": true,
     "devel": true,
-    "indent": 4
+    "node": true,
+    "indent": 4,
+    "predef": [
+        "define"
+    ]
 }
