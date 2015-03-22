@@ -1,7 +1,7 @@
 XHR.js
 ===
 
-####A vanilla javascript wrapper for the **XMLHttpRequest** object.
+####A vanilla javascript wrapper for the <code>XMLHttpRequest</code> object.
 
 ## Usage Example
 ```js
