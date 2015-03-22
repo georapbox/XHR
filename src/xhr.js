@@ -13,10 +13,10 @@
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,13 @@
  * SOFTWARE.
  */
 (function (name, context, definition) {
-	context[name] = definition();
+	if (typeof module !== 'undefined' && module.exports) {
+        module.exports = definition();
+	} else if (typeof define === 'function' && define.amd) {
+		define(definition);
+	} else {
+		context[name] = definition();
+	}
 }('XHR', this, function () {
 	var helpers = {
 		extend: function() {
@@ -45,7 +51,7 @@
 			}
 			return arguments[0];
 		},
-		
+
 		encodeUrl: function (url) {
 			var domain = url.substring(0, url.indexOf('?') + 1),
 				search = url.substring(url.indexOf('?') + 1),
@@ -54,16 +60,16 @@
 				encodedUrl = domain,
 				pair,
 				i;
-			
+
 			for (i = 0; i < varsLen; i += 1) {
 				pair = vars[i].split('=');
 				encodedUrl += encodeURIComponent(pair[0]) + '=' + encodeURIComponent(pair[1]) + '&';
 			}
-			
+
 			encodedUrl = encodedUrl.substring(0, encodedUrl.length - 1);
 			return encodedUrl;
 		},
-		
+
 		serialize: function (form) {
 			var parts = [],
 				field = null,
@@ -76,23 +82,23 @@
 
 			for (i = 0, len = form.elements.length; i < len; i += 1) {
 				field = form.elements[i];
-				
+
 				switch (field.type) {
 					case 'select-one':
 					case 'select-multiple':
-						if (field.name.length) {		
+						if (field.name.length) {
 							for (j = 0, optLen = field.options.length; j < optLen; j += 1) {
 								option = field.options[j];
-								
+
 								if (option.selected) {
 									optValue = '';
-									
+
 									if (option.hasAttribute) {
 										optValue = (option.hasAttribute('value') ? option.value : option.text);
 									} else {
 										optValue = (option.attributes.value.specified ? option.value : option.text);
 									}
-									
+
 									parts.push(encodeURIComponent(field.name) + '=' + encodeURIComponent(optValue));
 								}
 							}
@@ -120,7 +126,7 @@
 			return parts.join('&');
 		}
 	};
-	
+
 	var XHR = function (options) {
 		var that = this,
 			defaults,
@@ -128,7 +134,7 @@
 			i,
 			customHeadersLen,
 			customHeadersItem;
-		
+
 		// Define default options.
 		defaults = {
 			method: 'get',                                       // Type of request.
@@ -141,10 +147,10 @@
 			success: function () {},                             // Callback function to handle success.
 			error: function () {}                                // Callback function to handle errors.
 		};
-		
+
 		// Extend the default options with user's specified ones.
 		options = helpers.extend({}, defaults, options);
-		
+
 		that.method = options.method;
 		that.url = options.url;
 		that.async = options.async;
@@ -155,12 +161,12 @@
 		that.success = options.success;
 		that.error = options.error;
 		that.progressEvent = {};
-		
+
 		customHeadersLen = that.customHeaders.length;
-		
-		// Create a new XMLHttpRequest. 
+
+		// Create a new XMLHttpRequest.
 		xhr = new XMLHttpRequest();
-		
+
 		// onreadystatechange event
 		xhr.onreadystatechange = function () {
 			// if request is completed, handle success or error states.
@@ -169,10 +175,10 @@
 					that.success(xhr.status, xhr.responseText, xhr.responseXML, xhr.statusText);
 				} else {
 					that.error(xhr.status, xhr.responseText, xhr.responseXML, xhr.statusText);
-				}	
+				}
 			}
 		};
-		
+
 		// onprogress event
 		xhr.onprogress = function (event) {
 			if (event.lengthComputable){
@@ -192,51 +198,51 @@
 					total: event.total,
 					type: event.type
 				};
-				
+
 				return that.progressEvent;
 			}
 		};
-		
+
 		// Encode URL in case of a "GET" request.
 		if (that.method === 'get') {
 			that.url = helpers.encodeUrl(that.url);
 		}
-		
+
 		// Prepare the request to be sent.
 		xhr.open(that.method, that.url, that.async);
-		
+
 		// Set "Content-Type".
 		if (that.contentType !== false) {
 			xhr.setRequestHeader('Content-Type', that.contentType);
 		}
-		
+
         // Set custom headers.
 		if (customHeadersLen > 0) {
 			for (i = 0; i < customHeadersLen; i += 1) {
 				customHeadersItem = that.customHeaders[i];
-				
+
 				if (typeof customHeadersItem === 'object') {
 					for (var prop in customHeadersItem) {
 						if (customHeadersItem.hasOwnProperty(prop)) {
 							xhr.setRequestHeader(prop, customHeadersItem[prop]);
 						}
-					}	
+					}
 				} else {
 					throw new Error('Property "customHeader" expects an array of objects for value.');
 				}
 			}
 		}
-		
+
         // Serialize form if option set to "true".
 		if (that.serialize === true) {
 			that.data = helpers.serialize(that.data);
 		}
-        
+
 		// Send data.
 		xhr.send(that.data);
-		
+
 		return that;
 	};
-	
+
 	return XHR;
 }));
