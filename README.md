@@ -3,10 +3,8 @@ XHR.js
 
 ####A vanilla javascript wrapper for the **XMLHttpRequest** object.
 
-#####(Under development)
-
 ## Usage Example
-<pre>
+```js
 var xhr = new XHR({
     method: 'post',
     url: '<example-url>',
@@ -25,20 +23,20 @@ var xhr = new XHR({
     error: function (status, responseText, responseXML, statusText) {
         console.log('Request was unsuccessful: ' + status + ', ' + statusText);
     }
-});	
-</pre>
+});
+```
 
 
 ##Options
-- **method** | {String} | Type of request. Default value is "get".
-- **url** | {String} | Request url (relative path). Default value is ''.
-- **async** | {Boolean} | Defines if request is asynchronous or not. Default value is true.
-- **serialize** | {Boolean} | Defines if forms data sent in a POST request should be serialized. Default value is false.
-- **data** | {String / Object} | Data to be sent as the body of the request. Default value is "null" for browser compatibility issues.
-- **contentType** | {String} | Sets the Content Type of the request. Default value is "application/x-www-form-urlencoded"
-- **customHeaders** | {Array} | Sets custom request headers. Expects an array of objects. Default value is empty array.
-- **success** | {Function} | Callback function to handle success. Default is empty function.
-- **error** | {Function} | Callback function to handle error. Default is empty function.
+- <code>method {string}</code> Type of request. Default value is <code>get</code>.
+- <code>url {string}</code> Request url (relative path). Default value is <code>''</code>.
+- <code>async {boolean}</code> Defines if request is asynchronous or not. Default value is <code>true</code>.
+- <code>serialize {boolean}</code> Defines if forms data sent in a POST request should be serialized. Default value is <code>false</code>.
+- <code>data {string|object}</code> Data to be sent as the body of the request. Default value is <code>null</code> for browser compatibility issues.
+- <code>contentType {string}</code> Sets the Content Type of the request. Default value is <code>application/x-www-form-urlencoded</code>.
+- <code>customHeaders {array}</code> Sets custom request headers. Expects an array of objects. Default value is <code>[]</code>.
+- <code>success {function}</code> Callback function to handle success. Default is <code>function () {}</code>.
+- <code>error {function}</code> Callback function to handle error. Default is <code>function () {}</code>.
 
 
 ##Browser Compatibility
